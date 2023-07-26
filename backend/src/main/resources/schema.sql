@@ -1,9 +1,10 @@
-
+CREATE TYPE NOTE_STATE as ENUM ('ARCHIVED', 'ACTIVE');
 CREATE TABLE notes
 (
     id BIGINT PRIMARY KEY,
-    body VARCHAR(20000),
-    archived BOOL
+    title VARCHAR(50),
+    body VARCHAR(2000),
+    status NOTE_STATE
 );
 
 CREATE TABLE categories
