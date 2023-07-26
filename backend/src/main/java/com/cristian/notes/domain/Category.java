@@ -16,14 +16,13 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.PERSIST)
     private List<Note> notes = new ArrayList<>();
 
     public Category() {
     }
 
-    public Category(Long id, String name) {
-        this.id = id;
+    public Category(String name) {
         this.name = name;
     }
 
@@ -57,5 +56,9 @@ public class Category {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void addNote(Note note) {
+        notes.add(note);
     }
 }

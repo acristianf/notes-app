@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -53,16 +54,32 @@ public class NoteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(@PathVariable(name = "id") Long id, @RequestBody @Validated NoteDto noteUpdated) {
+        LOGGER.info("PUT /api/notes/{} body: {}", id, noteUpdated);
         return new ResponseEntity<>(noteService.updateNote(id, noteUpdated.title, noteUpdated.body), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/archive")
     public ResponseEntity<Note> archiveNote(@PathVariable(name = "id") Long id) {
+        LOGGER.info("PUT /api/notes/{}/archive", id);
         return new ResponseEntity<>(noteService.updateNoteState(id, ArchiveEnum.ARCHIVED), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/activate")
     public ResponseEntity<Note> activateNote(@PathVariable(name = "id") Long id) {
+        LOGGER.info("PUT /api/notes/{}/activate", id);
         return new ResponseEntity<>(noteService.updateNoteState(id, ArchiveEnum.ACTIVE), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/{categoryName}")
+    public ResponseEntity<Note> addCategoryToNote(@PathVariable(name = "id") Long id, @PathVariable(name = "categoryName") String categoryName) {
+        LOGGER.info("PUT /api/notes/{}/{}", id, categoryName);
+        return new ResponseEntity<>(noteService.addCategory(id, categoryName), HttpStatus.OK);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public String return400(NoSuchElementException ex) {
+        LOGGER.error("Unable to complete transaction", ex);
+        return ex.getMessage();
     }
 }

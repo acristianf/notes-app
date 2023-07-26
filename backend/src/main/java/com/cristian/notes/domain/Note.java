@@ -2,8 +2,10 @@ package com.cristian.notes.domain;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "notes")
@@ -23,11 +25,17 @@ public class Note {
     @Enumerated(EnumType.STRING)
     private ArchiveEnum status = ArchiveEnum.ACTIVE;
 
+    @Column(name = "created_at")
+    private String createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+    @Column(name = "last_edited")
+    private String lastEdited;
+
     @ManyToMany
-    @JoinTable(name = "note_categories",
+    @JoinTable(name = "notes_categories",
             joinColumns = @JoinColumn(name = "id_note"),
             inverseJoinColumns = @JoinColumn(name = "id_category"))
-    private List<Category> categories = new ArrayList<>();
+    private Set<Category> categories = new HashSet<>();
 
     public Note(String title, String body) {
         this.title = title;
@@ -62,6 +70,38 @@ public class Note {
         this.status = archived;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void addCategory(Category cat) {
+        categories.add(cat);
+    }
+
+    public void removeCategory(Category cat) {
+        categories.remove(cat);
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getLastEdited() {
+        return lastEdited;
+    }
+
+    public void setLastEdited(String lastEdited) {
+        this.lastEdited = lastEdited;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -71,11 +111,4 @@ public class Note {
                 '}';
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }
