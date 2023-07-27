@@ -1,4 +1,4 @@
-import {Form} from "react-bootstrap";
+import {Form, Stack} from "react-bootstrap";
 import {useState} from "react";
 import {useGlobalContext} from "../context.jsx";
 

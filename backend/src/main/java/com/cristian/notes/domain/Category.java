@@ -1,9 +1,12 @@
 package com.cristian.notes.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -16,8 +19,9 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "categories", cascade = CascadeType.PERSIST)
-    private List<Note> notes = new ArrayList<>();
+    @ManyToMany(mappedBy = "categories")
+    @JsonBackReference
+    private Set<Note> notes = new HashSet<>();
 
     public Category() {
     }
@@ -42,11 +46,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Note> getNotes() {
+    public Set<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<Note> notes) {
+    public void setNotes(HashSet<Note> notes) {
         this.notes = notes;
     }
 

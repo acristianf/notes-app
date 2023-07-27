@@ -1,5 +1,6 @@
 package com.cristian.notes.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,10 +32,11 @@ public class Note {
     @Column(name = "last_edited")
     private String lastEdited;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "notes_categories",
             joinColumns = @JoinColumn(name = "id_note"),
             inverseJoinColumns = @JoinColumn(name = "id_category"))
+    @JsonManagedReference
     private Set<Category> categories = new HashSet<>();
 
     public Note(String title, String body) {
@@ -100,6 +102,14 @@ public class Note {
 
     public void setLastEdited(String lastEdited) {
         this.lastEdited = lastEdited;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     @Override

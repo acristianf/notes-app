@@ -52,35 +52,25 @@ const Notes = () => {
             </Container>
             <Container className={"justify-content-center p-0 mt-1 card-collection"}>
                 {
-                    selectedCategory !== ""
-                        ? categories
-                            .find(cat => cat.name === selectedCategory)
-                            ?.notes.map(note => {
-                                return (
-                                    <NoteCard key={note.id}
-                                              note={note}
-                                              NotesStatus={NotesStatus}
-                                              shownNotesStatus={shownNotesStatus}
-                                              handleArchive={handleArchive}
-                                              handleActivate={handleActivate}
-                                              handleDelete={handleDelete}
-                                    />
-                                )
-                            })
-                        : notes
-                            .filter(note => note.status === shownNotesStatus)
-                            .map(note => {
-                                return (
-                                    <NoteCard key={note.id}
-                                              note={note}
-                                              NotesStatus={NotesStatus}
-                                              shownNotesStatus={shownNotesStatus}
-                                              handleArchive={handleArchive}
-                                              handleActivate={handleActivate}
-                                              handleDelete={handleDelete}
-                                    />
-                                )
-                            })
+                    notes
+                        .filter(note => (
+                            (selectedCategory !== ""
+                                ? note.categories.find(cat => cat.name === selectedCategory)
+                                : true)
+                            && note.status === shownNotesStatus
+                        ))
+                        .map(note => {
+                            return (
+                                <NoteCard key={note.id}
+                                          note={note}
+                                          NotesStatus={NotesStatus}
+                                          shownNotesStatus={shownNotesStatus}
+                                          handleArchive={handleArchive}
+                                          handleActivate={handleActivate}
+                                          handleDelete={handleDelete}
+                                />
+                            )
+                        })
                 }
             </Container>
         </main>
