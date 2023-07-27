@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,6 +44,13 @@ public class Note {
         this.title = title;
         this.body = body;
     }
+
+    public Note(String title, String body, List<Category> categories) {
+        this.title = title;
+        this.body = body;
+        this.categories.addAll(categories);
+    }
+
 
     public Note() {
 

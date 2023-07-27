@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,11 +25,13 @@ public class NoteService {
     private final Logger LOGGER = LoggerFactory.getLogger(NoteService.class);
     private final NoteRepository noteRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public NoteService(NoteRepository noteRepository, CategoryRepository categoryRepository) {
+    public NoteService(NoteRepository noteRepository, CategoryRepository categoryRepository, CategoryService categoryService) {
         this.noteRepository = noteRepository;
         this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     public List<Note> getAllNotes() {
@@ -41,9 +44,14 @@ public class NoteService {
         return noteRepository.findById(id);
     }
 
-    public Note createNote(String title, String body) {
-        LOGGER.info("create note with title '{}' and body '{}'", title, body);
-        return noteRepository.save(new Note(title, body));
+    public Note createNote(String title, String body, List<String> categories) {
+        LOGGER.info("create note with title '{}', body '{}' and categories {}", title, body, categories);
+        List<Category> categoryList = new ArrayList<>();
+        categories.forEach(cat -> categoryRepository.findByName(cat)
+                .ifPresentOrElse(
+                        categoryList::add,
+                        () -> categoryList.add(categoryService.createCategory(cat))));
+        return noteRepository.save(new Note(title, body, categoryList));
     }
 
     public void deleteNote(Long id) {

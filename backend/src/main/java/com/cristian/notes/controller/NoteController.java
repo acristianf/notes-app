@@ -43,7 +43,7 @@ public class NoteController {
     @PostMapping
     public ResponseEntity<Note> createNote(@RequestBody @Validated NoteDto note) {
         LOGGER.info("POST /api/notes body: {}", note);
-        return new ResponseEntity<>(noteService.createNote(note.title, note.body), HttpStatus.CREATED);
+        return new ResponseEntity<>(noteService.createNote(note.title, note.body, note.categories), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
