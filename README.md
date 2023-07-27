@@ -1,12 +1,12 @@
 # Challenge
 
 <!-- TOC -->
-* [Challenge](#challenge)
-    * [Note taking app](#note-taking-app)
-        * [Technologies](#technologies)
-            * [Backend](#backend)
-            * [Backend Documentation](#backend-documentation)
-            * [Frontend](#frontend)
+- [Challenge](#challenge)
+  - [Note-taking app](#note-taking-app)
+    - [Technologies](#technologies)
+      - [Backend](#backend)
+      - [Backend Documentation](#backend-documentation)
+      - [Frontend](#frontend)
 <!-- TOC -->
 
 ## Note-taking app
@@ -33,7 +33,9 @@ http://localhost:9001/swagger-ui/index.html
 
 #### Frontend
 
-- React 18.2.0
-    - Bootstrap 5
 - npm 9.8.1
 - node 20.5.0
+- React 18.2.0
+- React-bootstrap 2.8.0
+- Bootstrap 5
+- axios 1.4.0

@@ -1,16 +1,41 @@
 import notesIcon from '../assets/notes-icon.png';
-import {Button, Container, Image, Nav, Navbar, NavDropdown, ToggleButton} from "react-bootstrap";
+import {Container, Image, Nav, Navbar, NavDropdown, ToggleButton} from "react-bootstrap";
 import AddModal from "./AddModal.jsx";
 import {useGlobalContext} from "../context.jsx";
 
 const Header = () => {
-    const {shownNotesStatus, setShownNotesStatus, NotesStatus} = useGlobalContext();
+    const {
+        categories,
+        shownNotesStatus,
+        setShownNotesStatus,
+        NotesStatus,
+        selectedCategory,
+        setCategory
+    } = useGlobalContext();
+
+    function handleCategorySelection(e) {
+        setCategory(e.currentTarget.value);
+    }
+
     return (
         <Navbar collapseOnSelect expand={"lg"} className={"bg-dark"} data-bs-theme={"dark"}>
             <Container>
-                <Navbar.Brand href={"/"}><Image src={notesIcon} width={"48"} height={"48"}/>Notes</Navbar.Brand>
+                <Navbar.Brand className={"pe-3 border-end border-1 border-white"} href={"/"}>
+                    <Image src={notesIcon} width={"48"} height={"48"}/> Notes
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls={"responsive-navbar-nav"}/>
                 <Navbar.Collapse id={"responsive-navbar-nav"}>
+                    <select className={"form-select w-25 form-select-lg text-white"}
+                            value={selectedCategory}
+                            onChange={handleCategorySelection}>
+                        <option id={"noCat"} value={""}>No Category</option>
+                        {categories.map(cat => (
+                                <option key={cat.id} id={cat.id}>
+                                    {cat.name}
+                                </option>
+                            )
+                        )}
+                    </select>
                     <Nav className={"me-auto"}/>
                     <Nav>
                         <ToggleButton

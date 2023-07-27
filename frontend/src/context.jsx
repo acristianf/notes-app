@@ -14,6 +14,8 @@ const NotesStatus = {
 
 const AppProvider = ({children}) => {
     const [notes, setNotes] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setCategory] = useState("");
     const [shownNotesStatus, setShownNotesStatus] = useState(NotesStatus.ACTIVE);
 
     const postNote = (url, note) => {
@@ -25,6 +27,12 @@ const AppProvider = ({children}) => {
     const fetchNotes = (url) => {
         API.get(url)
             .then(res => setNotes(res.data))
+            .catch(e => console.log(e.message));
+    }
+
+    const fetchCategories = (url) => {
+        API.get(url)
+            .then(res => setCategories(res.data))
             .catch(e => console.log(e.message));
     }
 
@@ -40,7 +48,6 @@ const AppProvider = ({children}) => {
             .catch(e => console.log(e.message));
     }
 
-    // TODO: Finish editNote
     const editNote = (url, note) => {
         API.put(url, note)
             .then(res => console.log(res))
@@ -49,6 +56,7 @@ const AppProvider = ({children}) => {
 
     useEffect(() => {
         fetchNotes(notesUrl);
+        fetchCategories(categoriesUrl);
     }, [])
 
     return (
@@ -56,6 +64,11 @@ const AppProvider = ({children}) => {
             notes,
             setNotes,
             notesUrl,
+            categories,
+            setCategories,
+            selectedCategory,
+            setCategory,
+            categoriesUrl,
             shownNotesStatus,
             setShownNotesStatus,
             NotesStatus,

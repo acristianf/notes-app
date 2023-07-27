@@ -70,12 +70,25 @@ public class NoteService {
     }
 
     public Note addCategory(Long id, String categoryName) {
+        LOGGER.info("add category '{}' to note {}", categoryName, id);
         Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
         Category category = categoryOptional.orElse(new Category(categoryName));
         Optional<Note> noteOptional = noteRepository.findById(id);
         Note note = noteOptional.orElseThrow(() -> noteNotFound(id));
         category.addNote(note);
         note.addCategory(categoryRepository.save(category));
+        return noteRepository.save(note);
+    }
+
+    public Note removeCategory(Long id, String categoryName) {
+        LOGGER.info("remove category '{}' from note {}", categoryName, id);
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
+        Category category = categoryOptional.orElseThrow(() -> new NoSuchElementException("No note found with name '" + categoryName + "'."));
+        Optional<Note> noteOptional = noteRepository.findById(id);
+        Note note = noteOptional.orElseThrow(() -> noteNotFound(id));
+        note.removeCategory(category);
+        category.removeNote(note);
+        categoryRepository.save(category);
         return noteRepository.save(note);
     }
 

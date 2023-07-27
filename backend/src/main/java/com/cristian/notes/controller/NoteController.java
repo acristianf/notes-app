@@ -76,6 +76,12 @@ public class NoteController {
         return new ResponseEntity<>(noteService.addCategory(id, categoryName), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}/{categoryName}")
+    public ResponseEntity<Note> removeCategoryFromNote(@PathVariable(name = "id") Long id, @PathVariable(name = "categoryName") String categoryName) {
+        LOGGER.info("DELETE /api/notes/{}/{}", id, categoryName);
+        return new ResponseEntity<>(noteService.removeCategory(id, categoryName), HttpStatus.OK);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     public String return400(NoSuchElementException ex) {

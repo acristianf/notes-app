@@ -61,4 +61,8 @@ public class Category {
     public void addNote(Note note) {
         notes.add(note);
     }
+
+    public void removeNote(Note note) {
+        notes.remove(note);
+    }
 }

@@ -3,10 +3,7 @@ import {useState} from "react";
 import {useGlobalContext} from "../context.jsx";
 
 const EditNoteForm = ({currentNote}) => {
-    const [note, setNote] = useState({
-        title: currentNote.title,
-        body: currentNote.body
-    })
+    const [note, setNote] = useState({...currentNote})
 
     const [validated, setValidated] = useState(false);
     const {notesUrl, editNote} = useGlobalContext();
