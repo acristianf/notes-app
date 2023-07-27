@@ -29,7 +29,7 @@ public class NoteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Note>> getAllNotes() {
+    public ResponseEntity<List<NoteDto>> getAllNotes() {
         LOGGER.info("GET /api/notes");
         return new ResponseEntity<>(noteService.getAllNotes(), HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class NoteController {
     @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(@PathVariable(name = "id") Long id, @RequestBody @Validated NoteDto noteUpdated) {
         LOGGER.info("PUT /api/notes/{} body: {}", id, noteUpdated);
-        return new ResponseEntity<>(noteService.updateNote(id, noteUpdated.title, noteUpdated.body), HttpStatus.OK);
+        return new ResponseEntity<>(noteService.updateNote(id, noteUpdated.title, noteUpdated.body, noteUpdated.categories), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/archive")

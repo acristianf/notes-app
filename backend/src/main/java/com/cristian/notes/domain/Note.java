@@ -89,11 +89,18 @@ public class Note {
     }
 
     public void addCategory(Category cat) {
+        cat.addNote(this);
         categories.add(cat);
     }
 
     public void removeCategory(Category cat) {
+        cat.removeNote(this);
         categories.remove(cat);
+    }
+
+    public void removeAllCategories() {
+        this.categories.forEach(c -> c.removeNote(this));
+        this.categories.clear();
     }
 
     public String getCreatedAt() {

@@ -13,8 +13,7 @@ const Notes = () => {
         deleteNote,
         shownNotesStatus,
         NotesStatus,
-        selectedCategory,
-        categories
+        selectedCategory
     } = useGlobalContext();
 
     function updateNotesStatusInArray(updatedNote, status) {
@@ -55,7 +54,7 @@ const Notes = () => {
                     notes
                         .filter(note => (
                             (selectedCategory !== ""
-                                ? note.categories.find(cat => cat.name === selectedCategory)
+                                ? note.categories.find(cat => cat === selectedCategory)
                                 : true)
                             && note.status === shownNotesStatus
                         ))

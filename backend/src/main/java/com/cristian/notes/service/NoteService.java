@@ -3,6 +3,7 @@ package com.cristian.notes.service;
 import com.cristian.notes.domain.ArchiveEnum;
 import com.cristian.notes.domain.Category;
 import com.cristian.notes.domain.Note;
+import com.cristian.notes.dto.NoteDto;
 import com.cristian.notes.repository.CategoryRepository;
 import com.cristian.notes.repository.NoteRepository;
 import org.slf4j.Logger;
@@ -34,9 +35,12 @@ public class NoteService {
         this.categoryService = categoryService;
     }
 
-    public List<Note> getAllNotes() {
+    public List<NoteDto> getAllNotes() {
         LOGGER.info("get all notes");
-        return (List<Note>) noteRepository.findAll();
+        List<Note> notes = (List<Note>) noteRepository.findAll();
+        List<NoteDto> noteDtos = new ArrayList<>();
+        notes.forEach(n -> noteDtos.add(new NoteDto(n)));
+        return noteDtos;
     }
 
     public Optional<Note> getNote(Long id) {
@@ -59,13 +63,15 @@ public class NoteService {
         noteRepository.deleteById(id);
     }
 
-    public Note updateNote(Long id, String title, String body) {
+    public Note updateNote(Long id, String title, String body, List<String> categories) {
         LOGGER.info("update note {} with title '{}' and body '{}'", id, title, body);
         Optional<Note> noteOptional = noteRepository.findById(id);
         Note note = noteOptional.orElseThrow(() -> noteNotFound(id));
         note.setTitle(title);
         note.setBody(body);
         note.setLastEdited(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        note.removeAllCategories();
+        categories.forEach(c -> this.addCategory(note, c));
         return noteRepository.save(note);
     }
 
@@ -77,14 +83,22 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
+    public void addCategory(Note n, String categoryName) {
+        LOGGER.info("add category '{}' to note {}", categoryName, n.getId());
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
+        Category category = categoryOptional.orElse(new Category(categoryName));
+        n.addCategory(category);
+        categoryRepository.save(category);
+    }
+
     public Note addCategory(Long id, String categoryName) {
         LOGGER.info("add category '{}' to note {}", categoryName, id);
         Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
         Category category = categoryOptional.orElse(new Category(categoryName));
         Optional<Note> noteOptional = noteRepository.findById(id);
         Note note = noteOptional.orElseThrow(() -> noteNotFound(id));
-        category.addNote(note);
-        note.addCategory(categoryRepository.save(category));
+        note.addCategory(category);
+        categoryRepository.save(category);
         return noteRepository.save(note);
     }
 
@@ -95,7 +109,6 @@ public class NoteService {
         Optional<Note> noteOptional = noteRepository.findById(id);
         Note note = noteOptional.orElseThrow(() -> noteNotFound(id));
         note.removeCategory(category);
-        category.removeNote(note);
         categoryRepository.save(category);
         return noteRepository.save(note);
     }
