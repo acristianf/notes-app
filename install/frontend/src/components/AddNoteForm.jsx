@@ -14,9 +14,9 @@ const AddNoteForm = () => {
     const {notesUrl, postNote} = useGlobalContext();
 
     function handleSubmit(e) {
+        e.preventDefault();
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault();
             e.stopPropagation();
         } else {
             postNote(notesUrl, note);

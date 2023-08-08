@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import React from "react";
 import API from './api/axiosConfig.jsx';
 
@@ -20,7 +20,11 @@ const AppProvider = ({children}) => {
 
     const postNote = (url, note) => {
         API.post(url, note)
-            .then(res => console.log(res))
+            .then(res => {
+                window.location.reload();
+                console.log(res);
+            }
+            )
             .catch(e => console.log(e.message));
     }
 
