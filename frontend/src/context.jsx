@@ -21,9 +21,9 @@ const AppProvider = ({children}) => {
     const postNote = (url, note) => {
         API.post(url, note)
             .then(res => {
-                window.location.reload();
-                console.log(res);
-            }
+                    window.location.reload();
+                    console.log(res);
+                }
             )
             .catch(e => console.log(e.message));
     }
@@ -54,7 +54,11 @@ const AppProvider = ({children}) => {
 
     const editNote = (url, note) => {
         API.put(url, note)
-            .then(res => console.log(res))
+            .then(res => {
+                    window.location.reload();
+                    console.log(res);
+                }
+            )
             .catch(e => console.log(e.message))
     }
 

@@ -10,9 +10,9 @@ const EditNoteForm = ({currentNote}) => {
     const {notesUrl, editNote} = useGlobalContext();
 
     function handleSubmit(e) {
+        e.preventDefault();
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault();
             e.stopPropagation();
         } else {
             editNote(notesUrl + "/" + note.id, note);
